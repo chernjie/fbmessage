@@ -16,8 +16,7 @@ require 'timeout'
 require 'capybara-screenshot'
 require 'capybara-screenshot/rspec'
 require 'uri'
-require 'net/http' 
-# require './drivers/firefox.rb'
+require 'net/http'
 
 http = Net::HTTP.new(@host, @port)
 http.read_timeout = 500
@@ -29,7 +28,8 @@ feature "Greetings", js: true do
 		fill_in "email", with: seed["email"]
 		fill_in "pass", with: seed["password"]
 		click_button "Log In"
-		fill_in "message_body", with: seed["message_body"]
+		messages = seed["messages"]
+		fill_in "message_body", with: messages[rand messages.length]
 		find('textarea[name="message_body"]').native.send_keys(:return)
 	end
 end
