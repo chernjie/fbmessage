@@ -1,12 +1,13 @@
-Facebook-Messenger Automation
+# Facebook-Messenger Automation
 
-# Installation
+### Installation
 
 ```bash
 $ bundle install --path vendor/bundle
 ```
 
-# Run
+### Run
+
 ```
 $ bundle exec rspec -r ./seed.rb ./acceptance.rb
 ```
