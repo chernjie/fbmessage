@@ -27,6 +27,7 @@ feature "Greetings", js: true do
 		visit seed["url"]
 		fill_in "email", with: seed["email"]
 		fill_in "pass", with: seed["password"]
+		check "Keep me logged in" # persist_box
 		click_button "Log In"
 		messages = seed["messages"]
 		fill_in "message_body", with: messages[rand messages.length]
