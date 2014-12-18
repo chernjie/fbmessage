@@ -17,6 +17,13 @@ require 'capybara-screenshot'
 require 'capybara-screenshot/rspec'
 require 'uri'
 require 'net/http'
+require 'capybara-webkit'
+require 'headless'
+
+Capybara.javascript_driver = :webkit
+
+headless = Headless.new
+headless.start
 
 http = Net::HTTP.new(@host, @port)
 http.read_timeout = 500
@@ -34,3 +41,5 @@ feature "Greetings", js: true do
 		find('textarea[name="message_body"]').native.send_keys(:return)
 	end
 end
+
+headless.destroy
