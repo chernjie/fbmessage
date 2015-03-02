@@ -1,0 +1,5 @@
+seed/*rb
+!seed/seed.rb
+vendor/
+.bundle/
+Gemfile.lock

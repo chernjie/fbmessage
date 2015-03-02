@@ -9,12 +9,12 @@ function _setup()
 function _init()
 {
 	sudo nohup Xvfb :10 -ac
-	until ps aux | grep Xvfb | grep -ve grep -c
+	until ps aux | grep Xvfb | grep -ve grep -c -q
 	do
-		echo .
+		echo -n .
 	done &&
 		DISPLAY=:10 firefox &
 }
 
 _init
-bundle exec rspec -r ./loveyou.rb ./acceptance.rb
+bundle exec rspec -r ${2:-./seed.rb} ./acceptance.rb
