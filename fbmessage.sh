@@ -37,6 +37,28 @@ _send_message() {
 	chrome-cli execute "$(_javascript "$@")" -t $_tab_id
 }
 
+_recipients() {
+	_open https://m.facebook.com/messages/
+	_is_loaded $_tab_id
+	chrome-cli source -t $_tab_id |
+		html2 2> /dev/null |
+		grep messages/read/ -A50 |
+		grep -e @href -e thread-title -A1 |
+		grep -e @href -e strong |
+		cut -d= -f2- |
+		cut -d= -f2- |
+		while read i
+		do
+			if test "$(echo "$i" | cut -c1-3)" = "id."
+				then id="$i"
+			else
+				echo "$i" "$id"
+				id=
+			fi
+		done
+	chrome-cli close -t $_tab_id
+}
+
 _main() {
 	_open https://m.facebook.com/messages/read/?tid=id.398940466822049
 	_is_loaded $_tab_id
@@ -45,8 +67,9 @@ _main() {
 
 ### OPTIONS ###
 
-use chrome-cli grep tr cut
+use chrome-cli grep tr cut html2
 case $1 in
 	'') echo Write a reply... ;;
+	list) _recipients;;
 	*) _main "$@";;
 	esac
