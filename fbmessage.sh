@@ -11,7 +11,7 @@ use() {
 }
 
 _window_exists() {
-	chrome-cli list links | grep $1 | grep -oE ':[0-9]+' -m1 | tr -d :
+	chrome-cli list links | grep $1 | grep -oE ':?[0-9]+' -m1 | head -1 | tr -d :
 }
 
 _open() {
