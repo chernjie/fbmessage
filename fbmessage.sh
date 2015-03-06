@@ -37,12 +37,36 @@ _send_message() {
 	chrome-cli execute "$(_javascript "$@")" -t $_tab_id
 }
 
+_recipient() {
+	_find_recipient_by_pattern "$@" && return 0
+
+	case "$@" in
+		id.[0-9][0-9]*) echo "$@";;
+		*)
+			echo Who do you want to send it to?
+			exit 1
+			;;
+	esac
+}
+
+_find_recipient_by_pattern() {
+	test -f $0.cache || _recipients
+	grep -i $@ $0.cache | cut -d" " -f1
+	return ${PIPESTATUS[0]}
+}
+
 _is_recipient() {
 	case "$@" in
-		id.*) return 0;;
+		id.[0-9][0-9]*) return 0;;
 		*)    return 1;;
 	esac
 }
+
+_recipients_cache() {
+	test -f $0.cache || _recipients
+	cat $0.cache
+}
+
 
 _recipients() {
 	_open https://m.facebook.com/messages/
@@ -59,15 +83,16 @@ _recipients() {
 			if _is_recipient "$i"
 				then id="$i"
 			else
-				echo "$id" "$i"
+				echo "$id" "$i" | tee -a $0.cache
 				id=
 			fi
 		done
-	chrome-cli close -t $_tab_id
 }
 
 _main() {
-	_open https://m.facebook.com/messages/read/?tid=id.398940466822049
+	local tid=$(_recipient $1)
+	shift
+	_open https://m.facebook.com/messages/read/?tid=$(tid)
 	_is_loaded $_tab_id
 	_send_message "$@"
 }
@@ -77,6 +102,6 @@ _main() {
 use chrome-cli grep tr cut html2
 case $1 in
 	'') echo Write a reply... ;;
-	list) _recipients;;
+	list) _recipients_cache;;
 	*) _main "$@";;
 	esac
