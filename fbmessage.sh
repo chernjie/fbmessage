@@ -37,6 +37,13 @@ _send_message() {
 	chrome-cli execute "$(_javascript "$@")" -t $_tab_id
 }
 
+_is_recipient() {
+	case "$@" in
+		id.*) return 0;;
+		*)    return 1;;
+	esac
+}
+
 _recipients() {
 	_open https://m.facebook.com/messages/
 	_is_loaded $_tab_id
@@ -49,10 +56,10 @@ _recipients() {
 		cut -d= -f2- |
 		while read i
 		do
-			if test "$(echo "$i" | cut -c1-3)" = "id."
+			if _is_recipient "$i"
 				then id="$i"
 			else
-				echo "$i" "$id"
+				echo "$id" "$i"
 				id=
 			fi
 		done
