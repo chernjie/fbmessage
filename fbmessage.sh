@@ -21,6 +21,14 @@ _open() {
 		_tab_id=$(chrome-cli open $1 | grep ^Id | cut -d: -f2)
 }
 
+_is_loaded() {
+	until chrome-cli info -t $1 | grep "Loading: No" -q
+	do
+		sleep 1
+		echo still loading...
+	done
+}
+
 _javascript() {
 	echo '(function (d){ d.querySelector("#composerInput").value = "'"$@"'"; d.querySelector("form").submit(); return "message sent"; })(document);'
 }
@@ -31,6 +39,7 @@ _send_message() {
 
 _main() {
 	_open https://m.facebook.com/messages/read/?tid=id.398940466822049
+	_is_loaded $_tab_id
 	_send_message "$@"
 }
 
