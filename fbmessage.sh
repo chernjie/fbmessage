@@ -51,7 +51,7 @@ _recipient() {
 
 _find_recipient_by_pattern() {
 	test -f $0.cache || _recipients
-	grep -i $@ $0.cache | cut -d" " -f1
+	grep -m1 -i $@ $0.cache | cut -d" " -f1
 	return ${PIPESTATUS[0]}
 }
 
@@ -92,7 +92,7 @@ _recipients() {
 _main() {
 	local tid=$(_recipient $1)
 	shift
-	_open https://m.facebook.com/messages/read/?tid=$(tid)
+	_open https://m.facebook.com/messages/read/?tid=$tid
 	_is_loaded $_tab_id
 	_send_message "$@"
 }

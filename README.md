@@ -25,8 +25,7 @@ All commands assumes you are logged into Facebook.
 
 ```bash
 $ brew install chrome-cli xml2
-$ cd ~/bin
-$ git clone https://github.com/chernjie/fbmessage
-$ ln -s fbmessage/fbmessage.sh .
+$ git clone https://github.com/chernjie/fbmessage ~/bin/fbmessage
+$ ln -s ~/bin/fbmessage/fbmessage.sh ~/bin/
 ```
 
