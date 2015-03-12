@@ -11,7 +11,8 @@ use() {
 }
 
 _window_exists() {
-	chrome-cli list links | grep $1 | grep -oE ':?[0-9]+' -m1 | head -1 | tr -d :
+	chrome-cli list links | grep $1 |
+		grep -oE '([0-9]+:)?[0-9]+' | head -1 | sed s/.*://
 }
 
 _open() {
@@ -25,7 +26,7 @@ _is_loaded() {
 	until chrome-cli info -t $1 | grep "Loading: No" -q
 	do
 		sleep 1
-		echo still loading...
+		echo still loading... >&2
 	done
 }
 
