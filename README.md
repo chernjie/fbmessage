@@ -2,6 +2,8 @@
 
 A simple tool to send messages on Facebook via command line.
 
+*** UPDATE: Facebook has just launched messenger.com on [April 8th, 2015](http://techcrunch.com/2015/04/08/facebook-messenger-desktop/), this work around is no longer needed to avoid distraction from Facebook newsfeed.
+
 ### Usage
 
 All commands assumes you are logged into Facebook.
