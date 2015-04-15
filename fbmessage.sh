@@ -44,7 +44,7 @@ _recipient() {
 	case "$@" in
 		id.[0-9][0-9]*) echo "$@";;
 		*)
-			echo Who do you want to send it to?
+			echo Who do you want to send it to? >&2
 			exit 1
 			;;
 	esac
@@ -93,6 +93,7 @@ _recipients() {
 _main() {
 	local tid=$(_recipient $1)
 	shift
+	test -z "$tid" && exit 1
 	_open https://m.facebook.com/messages/read/?tid=$tid
 	_is_loaded $_tab_id
 	_send_message "$@"
